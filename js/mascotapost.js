@@ -9,8 +9,3 @@ let conn = mysql.createConnection({
     password: 'root',
     database: 'sandylance'
 });
-
-conn.connect(function(err){
-    if(err) throw err;
-    console.log("Conexión exitosa a base de datos");
-});

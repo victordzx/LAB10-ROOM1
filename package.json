@@ -2,7 +2,7 @@
   "name": "lab10-room1",
   "version": "1.0.0",
   "description": "",
-  "main": "js/mascota.js",
+  "main": "js/mascotaget.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
