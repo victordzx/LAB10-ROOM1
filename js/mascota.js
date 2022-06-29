@@ -51,7 +51,6 @@ app.get("/mascota/get/:id", function (req, res){
 // ruta: /mascota/create/
 app.post('/mascota/create', bp.urlencoded({extended: true}), function (req, res) {
 
-    let mascotaid = 0; // inicializamos variable
     let nombre = req.body.nombre;
     let anonac = req.body.anonac;
     let historia = req.body.historia;
@@ -61,14 +60,13 @@ app.post('/mascota/create', bp.urlencoded({extended: true}), function (req, res)
     let otros = req.body.otros;
     let cuenta = req.body.cuenta;
 
-    let parametros = [mascotaid, nombre, anonac, historia, observ, sexo, especie, otros, cuenta];
-    let query = "insert into mascota (idmascota, nombre, anho, historia, observaciones, sexo, raza_especie_idraza, raza_otros, cuenta_idcuenta) VALUES (?,?,?,?,?,?,?,?,?)";
+    let parametros = [nombre, anonac, historia, observ, sexo, especie, otros, cuenta];
+    let query = "insert into mascota (nombre, anho, historia, observaciones, sexo, raza_especie_idraza, raza_otros, cuenta_idcuenta) VALUES (?,?,?,?,?,?,?,?)";
 
     conn.query(query, parametros, function (err, result) {
         if (err) throw err;
 
-        conn.query("SELECT * FROM mascota", function (err, results) {
-            results.idmascota = results.length; // autoincrementamos id de nuevos registros
+        conn.query("select * from mascota order by idmascota desc limit 1;", function (err, results) {
             res.json(results);
         });
     });
