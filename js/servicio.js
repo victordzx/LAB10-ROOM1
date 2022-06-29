@@ -15,31 +15,27 @@ conn.connect(function(err){
     if(err) throw err;
     console.log("Conexión exitosa a base de datos");
 });
-// ruta: /servicio/create/
-app.post('/servicio/create', bp.urlencoded({extended: true}), function (req, res) {
+// ruta: /servicio/create/{idmascota}
+app.post('/servicio/create/:idmascota', bp.urlencoded({extended: true}), function (req, res) {
 
-    let mascotaid = 0; // inicializamos variable
-    let servicioid = req.body.servicioid
+    let mascotaid = req.params.idmascota;
     let cuenta = req.body.cuenta;
     let horaInicio = req.body.horaInicio;
     let duracion = req.body.duracion;
     let entrega = req.body.entrega;
     let responsable = req.body.responsable;
 
-    let parametros = [mascotaid, servicioid, cuenta, horaInicio, duracion, entrega, responsable];
-    let query = "insert into mascota (mascota_idmascota, idservicio, cuenta_idcuenta, hora_inicio, duracion, entrega, responsable_idresponsable) VALUES (?,?,?,?,?,?,?)";
+    let parametros = [mascotaid, cuenta, horaInicio, duracion, entrega, responsable];
+    let query = "insert into servicio (mascota_idmascota, cuenta_idcuenta, hora_inicio, duracion, entrega, responsable_idresponsable) VALUES (?,?,?,?,?,?)";
 
     conn.query(query, parametros, function (err, result) {
         if (err) throw err;
 
-        conn.query("SELECT * FROM servicio", function (err, results) {
-            results.idmascota = results.length; // autoincrementamos id de nuevos registros
+        conn.query("select * from servicio order by idservicio desc limit 1", function (err, results) {
             res.json(results);
         });
     });
 });
-
-conn.connect(function(err){
-    if(err) throw err;
-    console.log("Conexión exitosa a base de datos");
+app.listen(3000, () => {
+    console.log("Servidor corriendo en puerto 3000");
 });
